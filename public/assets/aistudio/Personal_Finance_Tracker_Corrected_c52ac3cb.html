@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#121214">
+    <meta name="description" content="Offline personal finance tracker">
+    <title>Personal Finance Tracker</title>
+    <style>
+
+        /* Offline utility layer: keeps the original Tailwind-style layout without a CDN. */
+        * { box-sizing: border-box; }
+        html { background:#000; -webkit-text-size-adjust:100%; }
+        button, input, select, textarea { font: inherit; }
+        button { cursor:pointer; -webkit-tap-highlight-color:transparent; }
+        input,select,textarea { color:inherit; }
+        .hidden{display:none!important}.block{display:block}.fixed{position:fixed}.relative{position:relative}
+        .inset-0{inset:0}.bottom-0{bottom:0}.bottom-20{bottom:5rem}.left-0{left:0}.right-0{right:0}.right-6{right:1.5rem}
+        .z-10{z-index:10}.z-20{z-index:20}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.ml-1{margin-left:.25rem}.mr-2{margin-right:.5rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-3{margin-top:.75rem}
+        .flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.flex-col{flex-direction:column}.flex-1{flex:1 1 0%}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-around{justify-content:space-around}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+        .gap-1{gap:.25rem}.gap-2{gap:.5rem}.space-y-2>*+*{margin-top:.5rem}.space-y-3>*+*{margin-top:.75rem}.space-y-4>*+*{margin-top:1rem}.space-y-6>*+*{margin-top:1.5rem}.space-x-2>*+*{margin-left:.5rem}.space-x-3>*+*{margin-left:.75rem}.space-x-4>*+*{margin-left:1rem}
+        .w-full{width:100%}.w-14{width:3.5rem}.w-8{width:2rem}.w-2\/3{width:66.666667%}.h-full{height:100%}.h-2{height:.5rem}.h-8{height:2rem}.h-14{height:3.5rem}.h-16{height:4rem}.max-w-\[440px\]{max-width:440px}.max-h-40{max-height:10rem}
+        .overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.min-w-0{min-width:0}.rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.rounded-full{border-radius:9999px}
+        .border{border:1px solid #2c2c2e}.border-b{border-bottom:1px solid #2c2c2e}.border-t{border-top:1px solid #2c2c2e}.divide-y>*+*{border-top:1px solid #2c2c2e}.divide-\[\#2c2c2e\]>*+*{border-color:#2c2c2e}.border-\[\#2c2c2e\]{border-color:#2c2c2e}
+        .bg-transparent{background:transparent}.bg-\[\#121214\]{background:#121214}.bg-\[\#141416\]{background:#141416}.bg-\[\#171719\]{background:#171719}.bg-\[\#1c1c1e\]{background:#1c1c1e}.bg-\[\#2c2c2e\]{background:#2c2c2e}.bg-\[\#ff3b30\]{background:#ff3b30}.bg-gray-800{background:#1f2937}
+        .text-white{color:#fff}.text-gray-100{color:#f3f4f6}.text-gray-200{color:#e5e7eb}.text-gray-300{color:#d1d5db}.text-gray-400{color:#9ca3af}.text-gray-500{color:#6b7280}.text-gray-600{color:#4b5563}.text-blue-400{color:#60a5fa}.text-green-400{color:#4ade80}.text-red-400{color:#f87171}.text-yellow-400{color:#facc15}.text-\[\#30b0fe\]{color:#30b0fe}.text-\[\#ff3b30\]{color:#ff3b30}
+        .text-\[9px\]{font-size:9px}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-xs{font-size:.75rem;line-height:1rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}
+        .font-normal{font-weight:400}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.uppercase{text-transform:uppercase}.tracking-wider{letter-spacing:.05em}
+        .p-1{padding:.25rem}.p-2{padding:.5rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-3\.5{padding:.875rem}.p-4{padding:1rem}.p-8{padding:2rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.pb-1{padding-bottom:.25rem}.pb-2{padding-bottom:.5rem}.pb-16{padding-bottom:4rem}.pt-1{padding-top:.25rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}
+        .shadow-2xl{box-shadow:0 25px 50px -12px rgba(0,0,0,.5)}.cursor-pointer{cursor:pointer}.transition-colors{transition:background-color .15s,color .15s,border-color .15s}.transition-transform{transition:transform .15s}.hover\:bg-\[\#2c2c2e\]:hover{background:#2c2c2e}.hover\:text-white:hover{color:#fff}.hover\:text-yellow-400:hover{color:#facc15}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}
+        .placeholder-gray-600::placeholder{color:#4b5563}.active\:scale-95:active{transform:scale(.95)}
+        .fas,.far{font-style:normal;display:inline-block;font-family:Arial,sans-serif;font-weight:700;line-height:1}
+        .fa-arrow-left:before{content:'←'}.fa-arrow-down:before{content:'↓'}.fa-arrow-up:before{content:'↑'}.fa-exchange-alt:before{content:'⇄'}.fa-backspace:before{content:'⌫'}.fa-book:before{content:'▤'}.fa-chart-pie:before{content:'◔'}.fa-chevron-left:before{content:'‹'}.fa-chevron-right:before{content:'›'}.fa-cog:before{content:'⚙'}.fa-download:before{content:'↓'}.fa-ellipsis-h:before{content:'•••'}.fa-file-export:before{content:'⇧'}.fa-file-import:before{content:'⇩'}.fa-plus:before{content:'+'}.fa-star:before{content:'★'}.fa-times:before{content:'×'}.fa-trash:before,.fa-trash-alt:before{content:'▤'}.fa-upload:before{content:'↑'}.fa-wallet:before{content:'▣'}
+        @media(hover:hover){button:hover{filter:brightness(1.08)}}
+        @supports(padding:max(0px)){.app-container{padding-bottom:env(safe-area-inset-bottom)}.fixed.bottom-0{padding-bottom:env(safe-area-inset-bottom)}}
+        @media(max-width:360px){.app-container{width:100%}.text-2xl{font-size:1.3rem}}
+
+        :root {
+            --bg-main: #121214;
+            --bg-card: #1c1c1e;
+            --bg-card-hover: #2c2c2e;
+            --border-color: #2c2c2e;
+            --text-main: #e5e5ea;
+            --text-muted: #8e8e93;
+            --accent-red: #ff3b30;
+            --accent-blue: #30b0fe;
+            --accent-green: #34c759;
+        }
+
+        body {
+            background-color: #000000;
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .app-container {
+            max-width: 440px;
+            margin: 0 auto;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: var(--bg-main);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+
+        .active-tab {
+            color: var(--accent-red);
+            border-bottom: 2px solid var(--accent-red);
+        }
+
+        .active-nav {
+            color: var(--accent-red) !important;
+        }
+
+        .num-pad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background-color: #2c2c2e;
+        }
+
+        .num-key {
+            background-color: #1c1c1e;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 52px;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+
+        .num-key:active {
+            background-color: #3a3a3c;
+        }
+
+        .done-key {
+            background-color: var(--accent-red);
+            grid-row: span 2;
+            height: 105px;
+            font-weight: 600;
+        }
+
+        .done-key:active {
+            background-color: #d32f2f;
+        }
+
+        /* Calendar Styling */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background-color: var(--border-color);
+        }
+
+        .calendar-day-header {
+            background-color: var(--bg-card);
+            text-align: center;
+            padding: 6px 0;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .calendar-cell {
+            background-color: var(--bg-main);
+            min-height: 52px;
+            padding: 4px 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .calendar-cell.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-cell.selected {
+            border: 1px solid var(--accent-red);
+            background-color: rgba(255, 59, 48, 0.1);
+        }
+
+        .calendar-cell.today .day-num {
+            background-color: var(--accent-red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2c2c2e;
+            border-radius: 4px;
+        }
+    </style>
+    <!-- This document has no external scripts, stylesheets, fonts, or network dependencies. -->
+</head>
+<body>
+
+<div class="app-container" id="app">
+    <!-- TOP HEADER -->
+    <div class="px-4 py-3 flex justify-between items-center bg-[#1c1c1e] border-b border-[#2c2c2e] z-10">
+        <div class="flex items-center space-x-2">
+            <button onclick="changeMonth(-1)" class="text-gray-400 hover:text-white px-1"><i class="fas fa-chevron-left text-xs"></i></button>
+            <span class="text-base font-semibold text-gray-100" id="header-month-display">Nov 2026</span>
+            <button onclick="changeMonth(1)" class="text-gray-400 hover:text-white px-1"><i class="fas fa-chevron-right text-xs"></i></button>
+        </div>
+        <div class="flex items-center space-x-4 text-gray-400">
+            <button onclick="openFavoritesModal()" class="hover:text-yellow-400 transition-colors" title="Favorites">
+                <i class="fas fa-star text-sm"></i>
+            </button>
+            <button onclick="switchNav('more')" class="hover:text-white transition-colors" title="Settings">
+                <i class="fas fa-cog text-sm"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN VIEW PANELS -->
+    <div id="main-content" class="flex-1 flex flex-col overflow-hidden pb-16">
+        
+        <!-- 1. TRANSACTIONS VIEW -->
+        <div id="view-transactions" class="view-panel flex-1 flex flex-col overflow-hidden">
+            <!-- Sub Header Tabs -->
+            <div class="flex text-xs border-b border-[#2c2c2e] bg-[#1c1c1e] text-gray-400">
+                <button onclick="switchTransTab('daily')" id="tab-daily" class="flex-1 py-2.5 text-center active-tab font-medium">Daily</button>
+                <button onclick="switchTransTab('calendar')" id="tab-calendar" class="flex-1 py-2.5 text-center font-medium">Calendar</button>
+                <button onclick="switchTransTab('monthly')" id="tab-monthly" class="flex-1 py-2.5 text-center font-medium">Monthly</button>
+                <button onclick="switchTransTab('total')" id="tab-total" class="flex-1 py-2.5 text-center font-medium">Total</button>
+            </div>
+
+            <!-- Summary Bar -->
+            <div class="grid grid-cols-3 gap-1 p-2.5 bg-[#141416] text-center text-xs border-b border-[#2c2c2e]">
+                <div>
+                    <div class="text-gray-400 text-[10px] uppercase">Income</div>
+                    <div id="summary-income" class="text-[#30b0fe] font-semibold text-xs mt-0.5">₹ 0.00</div>
+                </div>
+                <div>
+                    <div class="text-gray-400 text-[10px] uppercase">Expenses</div>
+                    <div id="summary-expense" class="text-[#ff3b30] font-semibold text-xs mt-0.5">₹ 0.00</div>
+                </div>
+                <div>
+                    <div class="text-gray-400 text-[10px] uppercase">Total Net</div>
+                    <div id="summary-total" class="text-gray-200 font-semibold text-xs mt-0.5">₹ 0.00</div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT AREA -->
+            <div class="flex-1 overflow-y-auto" id="trans-tab-container">
+                
+                <!-- Daily Sub-Tab -->
+                <div id="subtab-daily" class="space-y-2">
+                    <div id="daily-transaction-list" class="divide-y divide-[#2c2c2e]"></div>
+                </div>
+
+                <!-- Calendar Sub-Tab -->
+                <div id="subtab-calendar" class="hidden flex flex-col h-full">
+                    <div class="calendar-grid" id="calendar-header">
+                        <div class="calendar-day-header text-red-400">Sun</div>
+                        <div class="calendar-day-header">Mon</div>
+                        <div class="calendar-day-header">Tue</div>
+                        <div class="calendar-day-header">Wed</div>
+                        <div class="calendar-day-header">Thu</div>
+                        <div class="calendar-day-header">Fri</div>
+                        <div class="calendar-day-header text-blue-400">Sat</div>
+                    </div>
+                    <div class="calendar-grid" id="calendar-body"></div>
+                    <div class="p-2 border-t border-[#2c2c2e] bg-[#1c1c1e] text-xs font-semibold text-gray-300" id="selected-date-title">
+                        Transactions on Selected Day
+                    </div>
+                    <div id="calendar-day-transactions" class="flex-1 overflow-y-auto divide-y divide-[#2c2c2e] bg-[#121214]"></div>
+                </div>
+
+                <!-- Monthly Breakdown Sub-Tab -->
+                <div id="subtab-monthly" class="hidden p-4 space-y-4">
+                    <div id="monthly-category-breakdown" class="space-y-3"></div>
+                </div>
+
+                <!-- Total Overview Sub-Tab -->
+                <div id="subtab-total" class="hidden p-4 space-y-4">
+                    <div class="bg-[#1c1c1e] p-4 rounded-xl border border-[#2c2c2e]">
+                        <div class="text-xs text-gray-400 mb-1">Overall Net Worth</div>
+                        <div id="total-net-worth" class="text-2xl font-bold text-white">₹ 0.00</div>
+                        <div class="mt-3 pt-3 border-t border-[#2c2c2e] grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <span class="text-gray-400 block">Total Income All-time</span>
+                                <span id="total-all-income" class="text-[#30b0fe] font-semibold">₹ 0.00</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-400 block">Total Expenses All-time</span>
+                                <span id="total-all-expense" class="text-[#ff3b30] font-semibold">₹ 0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-[#1c1c1e] p-4 rounded-xl border border-[#2c2c2e]">
+                        <div class="text-xs font-semibold text-gray-300 mb-2">Account Distribution</div>
+                        <div id="total-account-distribution" class="space-y-2 text-xs"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 2. STATS VIEW -->
+        <div id="view-stats" class="view-panel flex-1 p-4 overflow-y-auto hidden space-y-4">
+            <div class="text-sm font-semibold text-gray-200">Expense Analysis by Category</div>
+            <div id="stats-chart-container" class="space-y-3"></div>
+        </div>
+
+        <!-- 3. ACCOUNTS VIEW -->
+        <div id="view-accounts" class="view-panel flex-1 flex flex-col overflow-hidden hidden">
+            <div class="grid grid-cols-3 gap-1 p-3 bg-[#141416] text-center text-xs border-b border-[#2c2c2e]">
+                <div>
+                    <div class="text-gray-400 text-[10px] uppercase">Assets</div>
+                    <div id="acc-summary-assets" class="text-[#30b0fe] font-semibold text-xs mt-0.5">₹ 0.00</div>
+                </div>
+                <div>
+                    <div class="text-gray-400 text-[10px] uppercase">Liabilities</div>
+                    <div id="acc-summary-liabilities" class="text-[#ff3b30] font-semibold text-xs mt-0.5">₹ 0.00</div>
+                </div>
+                <div>
+                    <div class="text-gray-400 text-[10px] uppercase">Total</div>
+                    <div id="acc-summary-total" class="text-gray-200 font-semibold text-xs mt-0.5">₹ 0.00</div>
+                </div>
+            </div>
+            <div id="accounts-list" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+        </div>
+
+        <!-- 4. MORE / SETTINGS VIEW -->
+        <div id="view-more" class="view-panel flex-1 p-4 overflow-y-auto hidden space-y-6">
+            <div class="space-y-2">
+                <h3 class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Management</h3>
+                <div class="bg-[#1c1c1e] rounded-xl border border-[#2c2c2e] overflow-hidden divide-y divide-[#2c2c2e] text-sm">
+                    <button onclick="openCategoryManager()" class="w-full p-3.5 flex justify-between items-center text-left hover:bg-[#2c2c2e]">
+                        <span>Category & Subcategory Settings</span>
+                        <i class="fas fa-chevron-right text-xs text-gray-500"></i>
+                    </button>
+                    <button onclick="openAccountManager()" class="w-full p-3.5 flex justify-between items-center text-left hover:bg-[#2c2c2e]">
+                        <span>Manage Accounts & Balances</span>
+                        <i class="fas fa-chevron-right text-xs text-gray-500"></i>
+                    </button>
+                    <button onclick="openFavoritesModal()" class="w-full p-3.5 flex justify-between items-center text-left hover:bg-[#2c2c2e]">
+                        <span>Saved Favorite Templates</span>
+                        <i class="fas fa-chevron-right text-xs text-gray-500"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Offline Backup & Restore</h3>
+                <div class="bg-[#1c1c1e] rounded-xl border border-[#2c2c2e] overflow-hidden divide-y divide-[#2c2c2e] text-sm">
+                    <button onclick="exportDataJSON()" class="w-full p-3.5 flex justify-between items-center text-left hover:bg-[#2c2c2e]">
+                        <span class="text-blue-400"><i class="fas fa-download mr-2"></i> Export Backup (JSON)</span>
+                        <i class="fas fa-file-export text-xs text-gray-500"></i>
+                    </button>
+                    <label class="w-full p-3.5 flex justify-between items-center text-left hover:bg-[#2c2c2e] cursor-pointer">
+                        <span class="text-green-400"><i class="fas fa-upload mr-2"></i> Import Backup (JSON)</span>
+                        <input type="file" id="import-file-input" accept=".json" onchange="importDataJSON(event)" class="hidden">
+                        <i class="fas fa-file-import text-xs text-gray-500"></i>
+                    </label>
+                    <button onclick="resetDataConfirm()" class="w-full p-3.5 flex justify-between items-center text-left hover:bg-[#2c2c2e]">
+                        <span class="text-red-400"><i class="fas fa-trash-alt mr-2"></i> Reset All Local Data</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center text-xs text-gray-600 pt-4">
+                Personal Finance Tracker (Offline) v1.2
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FLOATING ACTION BUTTON -->
+    <button onclick="openForm('Expense')" id="fab-btn" class="fixed bottom-20 right-6 w-14 h-14 bg-[#ff3b30] rounded-full flex items-center justify-center text-white text-2xl shadow-2xl z-20 focus:outline-none active:scale-95 transition-transform">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <div class="fixed bottom-0 left-0 right-0 max-w-[440px] mx-auto bg-[#1c1c1e] border-t border-[#2c2c2e] flex justify-around items-center h-16 z-10">
+        <button onclick="switchNav('transactions')" id="nav-trans" class="flex flex-col items-center text-xs active-nav">
+            <i class="fas fa-book text-base mb-1"></i>
+            <span>Trans.</span>
+        </button>
+        <button onclick="switchNav('stats')" id="nav-stats" class="flex flex-col items-center text-xs text-gray-400">
+            <i class="fas fa-chart-pie text-base mb-1"></i>
+            <span>Stats</span>
+        </button>
+        <button onclick="switchNav('accounts')" id="nav-acc" class="flex flex-col items-center text-xs text-gray-400">
+            <i class="fas fa-wallet text-base mb-1"></i>
+            <span>Accounts</span>
+        </button>
+        <button onclick="switchNav('more')" id="nav-more" class="flex flex-col items-center text-xs text-gray-400">
+            <i class="fas fa-ellipsis-h text-base mb-1"></i>
+            <span>More</span>
+        </button>
+    </div>
+
+    <!-- ENTRY FORM MODAL -->
+    <div id="entry-modal" class="fixed inset-0 max-w-[440px] mx-auto bg-[#121214] z-50 flex flex-col hidden">
+        <div class="p-3 flex items-center justify-between border-b border-[#2c2c2e] bg-[#1c1c1e]">
+            <button onclick="closeForm()" class="text-gray-400 text-lg px-2"><i class="fas fa-arrow-left"></i></button>
+            <h2 id="form-type-title" class="text-base font-semibold text-gray-200">Expense</h2>
+            <button onclick="saveCurrentAsFavorite()" class="text-yellow-400 text-lg px-2" title="Save as Favorite">
+                <i class="far fa-star" id="favorite-star-icon"></i>
+            </button>
+        </div>
+
+        <div class="p-3 bg-[#171719]">
+            <div class="grid grid-cols-3 gap-2 bg-[#2c2c2e] p-1 rounded-lg text-xs text-center">
+                <button type="button" onclick="setFormType('Income')" id="btn-mode-income" class="py-1.5 rounded-md text-gray-400 font-medium">Income</button>
+                <button type="button" onclick="setFormType('Expense')" id="btn-mode-expense" class="py-1.5 rounded-md text-gray-400 font-medium">Expense</button>
+                <button type="button" onclick="setFormType('Transfer')" id="btn-mode-transfer" class="py-1.5 rounded-md text-gray-400 font-medium">Transfer</button>
+            </div>
+        </div>
+
+        <div class="flex-1 p-4 space-y-4 overflow-y-auto">
+            <div class="flex justify-between items-center text-sm border-b border-[#2c2c2e] pb-2">
+                <span class="text-gray-400">Date</span>
+                <input type="datetime-local" id="form-datetime" class="bg-transparent text-gray-200 font-medium focus:outline-none text-right">
+            </div>
+
+            <div class="flex justify-between items-center text-sm border-b border-[#2c2c2e] pb-2">
+                <span class="text-gray-400">Amount</span>
+                <div class="flex items-center space-x-2">
+                    <span id="form-amount-display" class="text-2xl font-bold text-red-400">0.00</span>
+                </div>
+            </div>
+
+            <!-- Category Field -->
+            <div id="field-category" class="space-y-2">
+                <div class="flex justify-between items-center text-sm border-b border-[#2c2c2e] pb-2 cursor-pointer" onclick="toggleSubCategoryPicker()">
+                    <span class="text-gray-400">Category</span>
+                    <span id="form-category-selected" class="text-gray-200 font-medium">Select Category <i class="fas fa-chevron-right text-xs ml-1"></i></span>
+                </div>
+                <div id="sub-category-picker" class="hidden grid grid-cols-2 gap-2 pt-2 text-xs max-h-40 overflow-y-auto"></div>
+            </div>
+
+            <!-- Single Account Field -->
+            <div id="field-account" class="flex justify-between items-center text-sm border-b border-[#2c2c2e] pb-2">
+                <span class="text-gray-400">Account</span>
+                <select id="form-account-select" class="bg-transparent text-gray-200 font-medium focus:outline-none text-right"></select>
+            </div>
+
+            <!-- Transfer Accounts Field -->
+            <div id="field-transfer-accounts" class="hidden space-y-3">
+                <div class="flex justify-between items-center text-sm border-b border-[#2c2c2e] pb-2">
+                    <span class="text-gray-400">From</span>
+                    <select id="form-transfer-from" class="bg-transparent text-gray-200 font-medium focus:outline-none text-right"></select>
+                </div>
+                <div class="flex justify-between items-center text-sm border-b border-[#2c2c2e] pb-2">
+                    <span class="text-gray-400">To</span>
+                    <select id="form-transfer-to" class="bg-transparent text-gray-200 font-medium focus:outline-none text-right"></select>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center text-sm border-b border-[#2c2c2e] pb-2">
+                <span class="text-gray-400">Note</span>
+                <input type="text" id="form-note" placeholder="Write a note..." class="bg-transparent text-right text-gray-200 placeholder-gray-600 focus:outline-none text-sm w-2/3">
+            </div>
+        </div>
+
+        <!-- Custom Keypad -->
+        <div class="bg-[#1c1c1e]">
+            <div class="px-3 py-1.5 text-xs text-gray-400 bg-[#141416] flex justify-between items-center border-t border-[#2c2c2e]">
+                <span>Numeric Input</span>
+                <button onclick="clearAmount()" class="text-gray-400 hover:text-white"><i class="fas fa-backspace"></i> Clear</button>
+            </div>
+            <div class="num-pad">
+                <div class="num-key" onclick="pressKey('1')">1</div>
+                <div class="num-key" onclick="pressKey('2')">2</div>
+                <div class="num-key" onclick="pressKey('3')">3</div>
+                <div class="num-key" onclick="pressKey('backspace')"><i class="fas fa-arrow-left text-xs"></i></div>
+
+                <div class="num-key" onclick="pressKey('4')">4</div>
+                <div class="num-key" onclick="pressKey('5')">5</div>
+                <div class="num-key" onclick="pressKey('6')">6</div>
+                <div class="num-key" onclick="pressKey('-')">-</div>
+
+                <div class="num-key" onclick="pressKey('7')">7</div>
+                <div class="num-key" onclick="pressKey('8')">8</div>
+                <div class="num-key" onclick="pressKey('9')">9</div>
+                <div class="num-key done-key" onclick="submitForm()">Done</div>
+
+                <div class="num-key" onclick="pressKey('00')">00</div>
+                <div class="num-key" onclick="pressKey('0')">0</div>
+                <div class="num-key" onclick="pressKey('.')">.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAVORITES MODAL -->
+    <div id="favorites-modal" class="fixed inset-0 max-w-[440px] mx-auto bg-[#121214] z-50 flex flex-col hidden">
+        <div class="p-3 flex items-center justify-between border-b border-[#2c2c2e] bg-[#1c1c1e]">
+            <h2 class="text-base font-semibold text-gray-200">Favorite Templates</h2>
+            <button onclick="closeFavoritesModal()" class="text-gray-400 text-lg px-2"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="favorites-list" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+    </div>
+
+    <!-- CATEGORY MANAGER MODAL -->
+    <div id="category-manager-modal" class="fixed inset-0 max-w-[440px] mx-auto bg-[#121214] z-50 flex flex-col hidden">
+        <div class="p-3 flex items-center justify-between border-b border-[#2c2c2e] bg-[#1c1c1e]">
+            <h2 class="text-base font-semibold text-gray-200">Manage Categories</h2>
+            <button onclick="closeCategoryManager()" class="text-gray-400 text-lg px-2"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-4 space-y-4 flex-1 overflow-y-auto">
+            <div class="bg-[#1c1c1e] p-3 rounded-lg space-y-2 border border-[#2c2c2e]">
+                <div class="text-xs font-semibold text-gray-300">Add Category / Subcategory</div>
+                <select id="new-cat-type" class="w-full bg-[#121214] p-2 rounded text-xs border border-[#2c2c2e] text-white">
+                    <option value="Expense">Expense Category</option>
+                    <option value="Income">Income Category</option>
+                </select>
+                <input type="text" id="new-cat-main" placeholder="Main Category (e.g. Food)" class="w-full bg-[#121214] p-2 rounded text-xs border border-[#2c2c2e] text-white">
+                <input type="text" id="new-cat-sub" placeholder="Subcategory (e.g. Dining Out)" class="w-full bg-[#121214] p-2 rounded text-xs border border-[#2c2c2e] text-white">
+                <button onclick="addCategorySubmit()" class="w-full py-2 bg-[#ff3b30] text-white text-xs rounded font-semibold">Add Category</button>
+            </div>
+            <div id="category-list-display" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <!-- ACCOUNT MANAGER MODAL -->
+    <div id="account-manager-modal" class="fixed inset-0 max-w-[440px] mx-auto bg-[#121214] z-50 flex flex-col hidden">
+        <div class="p-3 flex items-center justify-between border-b border-[#2c2c2e] bg-[#1c1c1e]">
+            <h2 class="text-base font-semibold text-gray-200">Manage Accounts</h2>
+            <button onclick="closeAccountManager()" class="text-gray-400 text-lg px-2"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-4 space-y-4 flex-1 overflow-y-auto">
+            <div class="bg-[#1c1c1e] p-3 rounded-lg space-y-2 border border-[#2c2c2e]">
+                <div class="text-xs font-semibold text-gray-300">Add / Edit Account</div>
+                <input type="text" id="new-acc-name" placeholder="Account Name (e.g. Savings)" class="w-full bg-[#121214] p-2 rounded text-xs border border-[#2c2c2e] text-white">
+                <input type="number" step="0.01" id="new-acc-balance" placeholder="Opening Balance" class="w-full bg-[#121214] p-2 rounded text-xs border border-[#2c2c2e] text-white">
+                <button onclick="addAccountSubmit()" class="w-full py-2 bg-[#ff3b30] text-white text-xs rounded font-semibold">Save Account</button>
+            </div>
+            <div id="account-manager-list" class="space-y-2"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // INITIAL ZERO-BASED DATA STATE
+    const defaultData = {
+        currentYear: 2026,
+        currentMonth: 10, // 0-indexed (10 = November)
+        selectedCalendarDate: '2026-11-02',
+        accounts: {
+            'Cash': 0.00,
+            'Card': 0.00,
+            'UPI': 0.00
+        },
+        categories: {
+            Expense: {
+                'Food': ['Groceries', 'Restaurants', 'Coffee'],
+                'Transport': ['Fuel', 'Taxi', 'Maintenance'],
+                'Shopping': ['Clothing', 'Electronics'],
+                'Bills': ['Electricity', 'Internet', 'Rent']
+            },
+            Income: {
+                'Salary': ['Main Job', 'Freelance'],
+                'Bonus': ['Incentive', 'Gift'],
+                'Petty Cash': ['Allowance', 'Reimbursement']
+            }
+        },
+        favorites: [],
+        transactions: []
+    };
+
+    let state = loadLocalData();
+
+    function loadLocalData() {
+        const stored = localStorage.getItem('personal_finance_db');
+        if (stored) {
+            try { return JSON.parse(stored); } catch(e) { console.error(e); }
+        }
+        return JSON.parse(JSON.stringify(defaultData));
+    }
+
+    function saveLocalData() {
+        localStorage.setItem('personal_finance_db', JSON.stringify(state));
+    }
+
+    // STATE CONTROLLERS
+    let activeNavView = 'transactions';
+    let activeTransSubTab = 'daily';
+
+    let currentForm = {
+        type: 'Expense',
+        amountStr: '0',
+        selectedCategory: '',
+        selectedSubCategory: ''
+    };
+
+    // ON DOM LOAD
+    document.addEventListener('DOMContentLoaded', () => {
+        initDatetimeInput();
+        renderAll();
+    });
+
+    function initDatetimeInput() {
+        const now = new Date();
+        const isoStr = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0,16);
+        document.getElementById('form-datetime').value = isoStr;
+    }
+
+    function renderAll() {
+        updateMonthDisplay();
+        renderAccountsView();
+        renderTransactionsView();
+        renderStatsView();
+        populateAccountSelectors();
+    }
+
+    function updateMonthDisplay() {
+        const dateObj = new Date(state.currentYear, state.currentMonth, 1);
+        const monthName = dateObj.toLocaleString('default', { month: 'short' });
+        document.getElementById('header-month-display').innerText = `${monthName} ${state.currentYear}`;
+    }
+
+    function changeMonth(delta) {
+        state.currentMonth += delta;
+        if (state.currentMonth < 0) {
+            state.currentMonth = 11;
+            state.currentYear -= 1;
+        } else if (state.currentMonth > 11) {
+            state.currentMonth = 0;
+            state.currentYear += 1;
+        }
+        saveLocalData();
+        renderAll();
+    }
+
+    // NAVIGATION
+    function switchNav(viewName) {
+        activeNavView = viewName;
+        document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.fixed.bottom-0 button').forEach(el => {
+            el.classList.remove('active-nav');
+            el.classList.add('text-gray-400');
+        });
+
+        if (viewName === 'transactions') {
+            document.getElementById('view-transactions').classList.remove('hidden');
+            document.getElementById('nav-trans').classList.add('active-nav');
+            document.getElementById('fab-btn').classList.remove('hidden');
+        } else if (viewName === 'stats') {
+            document.getElementById('view-stats').classList.remove('hidden');
+            document.getElementById('nav-stats').classList.add('active-nav');
+            document.getElementById('fab-btn').classList.add('hidden');
+            renderStatsView();
+        } else if (viewName === 'accounts') {
+            document.getElementById('view-accounts').classList.remove('hidden');
+            document.getElementById('nav-acc').classList.add('active-nav');
+            document.getElementById('fab-btn').classList.add('hidden');
+            renderAccountsView();
+        } else if (viewName === 'more') {
+            document.getElementById('view-more').classList.remove('hidden');
+            document.getElementById('nav-more').classList.add('active-nav');
+            document.getElementById('fab-btn').classList.add('hidden');
+        }
+    }
+
+    function switchTransTab(tabName) {
+        activeTransSubTab = tabName;
+        document.querySelectorAll('#view-transactions button').forEach(btn => btn.classList.remove('active-tab'));
+        document.getElementById(`tab-${tabName}`).classList.add('active-tab');
+
+        document.getElementById('subtab-daily').classList.add('hidden');
+        document.getElementById('subtab-calendar').classList.add('hidden');
+        document.getElementById('subtab-monthly').classList.add('hidden');
+        document.getElementById('subtab-total').classList.add('hidden');
+
+        document.getElementById(`subtab-${tabName}`).classList.remove('hidden');
+
+        if (tabName === 'calendar') renderCalendarView();
+        if (tabName === 'monthly') renderMonthlyView();
+        if (tabName === 'total') renderTotalOverview();
+    }
+
+    // RENDER TRANSACTIONS
+    function getFilteredMonthTransactions() {
+        return state.transactions.filter(t => {
+            const d = new Date(t.date);
+            return d.getFullYear() === state.currentYear && d.getMonth() === state.currentMonth;
+        });
+    }
+
+    function renderTransactionsView() {
+        const monthTrans = getFilteredMonthTransactions();
+
+        let incTotal = 0;
+        let expTotal = 0;
+
+        monthTrans.forEach(t => {
+            if (t.type === 'Income') incTotal += t.amount;
+            if (t.type === 'Expense') expTotal += t.amount;
+        });
+
+        document.getElementById('summary-income').innerText = `₹ ${incTotal.toFixed(2)}`;
+        document.getElementById('summary-expense').innerText = `₹ ${expTotal.toFixed(2)}`;
+        document.getElementById('summary-total').innerText = `₹ ${(incTotal - expTotal).toFixed(2)}`;
+
+        // Render Daily List
+        const dailyContainer = document.getElementById('daily-transaction-list');
+        dailyContainer.innerHTML = '';
+
+        if (monthTrans.length === 0) {
+            dailyContainer.innerHTML = `<div class="p-8 text-center text-xs text-gray-500">No transactions recorded for this month.</div>`;
+            return;
+        }
+
+        // Group by Date
+        const grouped = {};
+        monthTrans.forEach(t => {
+            const dayKey = t.date.split('T')[0];
+            if (!grouped[dayKey]) grouped[dayKey] = [];
+            grouped[dayKey].push(t);
+        });
+
+        Object.keys(grouped).sort().reverse().forEach(dateKey => {
+            const dayItems = grouped[dateKey];
+            let dayInc = 0, dayExp = 0;
+            dayItems.forEach(i => {
+                if (i.type === 'Income') dayInc += i.amount;
+                if (i.type === 'Expense') dayExp += i.amount;
+            });
+
+            const dateObj = new Date(dateKey);
+            const dayNum = String(dateObj.getDate()).padStart(2, '0');
+            const dayName = dateObj.toLocaleString('default', { weekday: 'short' });
+
+            const header = document.createElement('div');
+            header.className = 'px-4 py-2 bg-[#171719] text-xs text-gray-400 flex justify-between items-center border-b border-[#2c2c2e]';
+            header.innerHTML = `
+                <div><span class="font-bold text-white text-sm mr-2">${dayNum}</span> <span class="bg-[#2c2c2e] px-1.5 py-0.5 rounded text-gray-300 text-[10px]">${dayName}</span></div>
+                <div class="space-x-3 text-[11px]">
+                    <span class="text-[#30b0fe]">₹ ${dayInc.toFixed(2)}</span>
+                    <span class="text-[#ff3b30]">₹ ${dayExp.toFixed(2)}</span>
+                </div>
+            `;
+            dailyContainer.appendChild(header);
+
+            dayItems.forEach(t => {
+                const item = document.createElement('div');
+                item.className = 'px-4 py-3 flex justify-between items-center bg-[#1c1c1e] hover:bg-[#2c2c2e] transition-colors cursor-pointer';
+                item.onclick = () => deleteTransactionConfirm(t.id);
+
+                const colorClass = t.type === 'Income' ? 'text-[#30b0fe]' : (t.type === 'Expense' ? 'text-[#ff3b30]' : 'text-gray-300');
+                const sign = t.type === 'Expense' ? '-' : '';
+
+                item.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-[#2c2c2e] flex items-center justify-center text-xs text-gray-400">
+                            <i class="fas ${t.type === 'Income' ? 'fa-arrow-down text-[#30b0fe]' : (t.type === 'Expense' ? 'fa-arrow-up text-[#ff3b30]' : 'fa-exchange-alt')}"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-semibold text-gray-200">${t.category || t.type} ${t.subCategory ? `<span class="text-[10px] text-gray-400 font-normal">(${t.subCategory})</span>` : ''}</div>
+                            <div class="text-[10px] text-gray-500">${t.note ? t.note + ' • ' : ''}${t.account || (t.from + ' ➔ ' + t.to)}</div>
+                        </div>
+                    </div>
+                    <div class="text-xs font-bold ${colorClass}">
+                        ₹ ${sign}${t.amount.toFixed(2)}
+                    </div>
+                `;
+                dailyContainer.appendChild(item);
+            });
+        });
+    }
+
+    // CALENDAR VIEW
+    function renderCalendarView() {
+        const calBody = document.getElementById('calendar-body');
+        calBody.innerHTML = '';
+
+        const year = state.currentYear;
+        const month = state.currentMonth;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Calculate totals map
+        const monthTrans = getFilteredMonthTransactions();
+        const dailyNetMap = {};
+        monthTrans.forEach(t => {
+            const dStr = t.date.split('T')[0];
+            if (!dailyNetMap[dStr]) dailyNetMap[dStr] = 0;
+            if (t.type === 'Income') dailyNetMap[dStr] += t.amount;
+            if (t.type === 'Expense') dailyNetMap[dStr] -= t.amount;
+        });
+
+        // Prev month padding
+        const prevMonthDays = new Date(year, month, 0).getDate();
+        for (let i = firstDay - 1; i >= 0; i--) {
+            const cell = document.createElement('div');
+            cell.className = 'calendar-cell other-month';
+            cell.innerHTML = `<span class="day-num">${prevMonthDays - i}</span>`;
+            calBody.appendChild(cell);
+        }
+
+        // Current month cells
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const cell = document.createElement('div');
+            const isToday = (new Date().toISOString().split('T')[0] === dateStr);
+            const isSelected = (state.selectedCalendarDate === dateStr);
+
+            cell.className = `calendar-cell ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}`;
+            cell.onclick = () => selectCalendarDate(dateStr);
+
+            const net = dailyNetMap[dateStr];
+            let netHTML = '';
+            if (net !== undefined) {
+                const color = net >= 0 ? 'text-[#30b0fe]' : 'text-[#ff3b30]';
+                netHTML = `<span class="text-[9px] font-semibold ${color} mt-1">${net >= 0 ? '+' : ''}${net.toFixed(0)}</span>`;
+            }
+
+            cell.innerHTML = `
+                <span class="day-num">${day}</span>
+                ${netHTML}
+            `;
+            calBody.appendChild(cell);
+        }
+
+        renderCalendarDayTransactions();
+    }
+
+    function selectCalendarDate(dateStr) {
+        state.selectedCalendarDate = dateStr;
+        saveLocalData();
+        renderCalendarView();
+    }
+
+    function renderCalendarDayTransactions() {
+        const container = document.getElementById('calendar-day-transactions');
+        document.getElementById('selected-date-title').innerText = `Transactions on ${state.selectedCalendarDate}`;
+        container.innerHTML = '';
+
+        const dayTrans = state.transactions.filter(t => t.date.startsWith(state.selectedCalendarDate));
+
+        if (dayTrans.length === 0) {
+            container.innerHTML = `<div class="p-4 text-center text-xs text-gray-500">No records for this date.</div>`;
+            return;
+        }
+
+        dayTrans.forEach(t => {
+            const item = document.createElement('div');
+            item.className = 'px-4 py-2.5 flex justify-between items-center hover:bg-[#1c1c1e] text-xs';
+            const colorClass = t.type === 'Income' ? 'text-[#30b0fe]' : (t.type === 'Expense' ? 'text-[#ff3b30]' : 'text-gray-300');
+            item.innerHTML = `
+                <div>
+                    <div class="font-medium text-gray-200">${t.category || t.type}</div>
+                    <div class="text-[10px] text-gray-500">${t.account || (t.from + ' ➔ ' + t.to)}</div>
+                </div>
+                <div class="font-bold ${colorClass}">₹ ${t.amount.toFixed(2)}</div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    // MONTHLY VIEW
+    function renderMonthlyView() {
+        const container = document.getElementById('monthly-category-breakdown');
+        container.innerHTML = '';
+
+        const monthTrans = getFilteredMonthTransactions().filter(t => t.type === 'Expense');
+        let totalExp = monthTrans.reduce((acc, t) => acc + t.amount, 0);
+
+        if (totalExp === 0) {
+            container.innerHTML = `<div class="p-8 text-center text-xs text-gray-500">No expense records this month.</div>`;
+            return;
+        }
+
+        const catMap = {};
+        monthTrans.forEach(t => {
+            const cat = t.category || 'Other';
+            catMap[cat] = (catMap[cat] || 0) + t.amount;
+        });
+
+        Object.keys(catMap).sort((a,b) => catMap[b] - catMap[a]).forEach(cat => {
+            const amt = catMap[cat];
+            const pct = ((amt / totalExp) * 100).toFixed(1);
+
+            const card = document.createElement('div');
+            card.className = 'bg-[#1c1c1e] p-3 rounded-lg border border-[#2c2c2e] space-y-1.5';
+            card.innerHTML = `
+                <div class="flex justify-between text-xs font-medium">
+                    <span class="text-gray-200">${cat}</span>
+                    <span class="text-[#ff3b30]">₹ ${amt.toFixed(2)} (${pct}%)</span>
+                </div>
+                <div class="w-full bg-[#2c2c2e] h-2 rounded-full overflow-hidden">
+                    <div class="bg-[#ff3b30] h-full rounded-full" style="width: ${pct}%"></div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // TOTAL OVERVIEW
+    function renderTotalOverview() {
+        const totalNet = Object.values(state.accounts).reduce((a,b) => a + b, 0);
+        document.getElementById('total-net-worth').innerText = `₹ ${totalNet.toFixed(2)}`;
+
+        let allInc = 0, allExp = 0;
+        state.transactions.forEach(t => {
+            if (t.type === 'Income') allInc += t.amount;
+            if (t.type === 'Expense') allExp += t.amount;
+        });
+
+        document.getElementById('total-all-income').innerText = `₹ ${allInc.toFixed(2)}`;
+        document.getElementById('total-all-expense').innerText = `₹ ${allExp.toFixed(2)}`;
+
+        const distContainer = document.getElementById('total-account-distribution');
+        distContainer.innerHTML = '';
+        Object.keys(state.accounts).forEach(acc => {
+            const bal = state.accounts[acc];
+            const row = document.createElement('div');
+            row.className = 'flex justify-between items-center py-1 border-b border-[#2c2c2e]';
+            row.innerHTML = `
+                <span class="text-gray-400">${acc}</span>
+                <span class="font-semibold text-gray-200">₹ ${bal.toFixed(2)}</span>
+            `;
+            distContainer.appendChild(row);
+        });
+    }
+
+    // ACCOUNTS VIEW
+    function renderAccountsView() {
+        const totalAssets = Object.values(state.accounts).reduce((a, b) => a + b, 0);
+        document.getElementById('acc-summary-assets').innerText = `₹ ${totalAssets.toFixed(2)}`;
+        document.getElementById('acc-summary-liabilities').innerText = `₹ 0.00`;
+        document.getElementById('acc-summary-total').innerText = `₹ ${totalAssets.toFixed(2)}`;
+
+        const accountsList = document.getElementById('accounts-list');
+        accountsList.innerHTML = '';
+
+        Object.keys(state.accounts).forEach(acc => {
+            const val = state.accounts[acc] || 0;
+            const item = document.createElement('div');
+            item.className = 'bg-[#1c1c1e] p-4 rounded-xl flex justify-between items-center border border-[#2c2c2e]';
+            item.innerHTML = `
+                <div>
+                    <div class="text-sm font-semibold text-gray-200">${acc}</div>
+                    ${acc === 'Card' ? '<div class="text-[10px] text-gray-500 mt-1">Balance Payable ₹ 0.00</div>' : ''}
+                </div>
+                <div class="text-right">
+                    <div class="text-xs font-bold text-[#30b0fe]">₹ ${val.toFixed(2)}</div>
+                    ${acc === 'Card' ? `<div class="text-[10px] text-[#30b0fe] mt-1">Outst. Balance ₹ ${val.toFixed(2)}</div>` : ''}
+                </div>
+            `;
+            accountsList.appendChild(item);
+        });
+    }
+
+    // STATS VIEW
+    function renderStatsView() {
+        const container = document.getElementById('stats-chart-container');
+        container.innerHTML = '';
+
+        const monthTrans = getFilteredMonthTransactions().filter(t => t.type === 'Expense');
+        const totalExp = monthTrans.reduce((acc, t) => acc + t.amount, 0);
+
+        if (totalExp === 0) {
+            container.innerHTML = `<div class="p-8 text-center text-xs text-gray-500">No expense stats available.</div>`;
+            return;
+        }
+
+        const catMap = {};
+        monthTrans.forEach(t => {
+            const cat = t.category || 'Other';
+            catMap[cat] = (catMap[cat] || 0) + t.amount;
+        });
+
+        Object.keys(catMap).forEach(cat => {
+            const amt = catMap[cat];
+            const pct = ((amt / totalExp) * 100).toFixed(1);
+
+            const row = document.createElement('div');
+            row.className = 'bg-[#1c1c1e] p-3 rounded-xl border border-[#2c2c2e] space-y-1';
+            row.innerHTML = `
+                <div class="flex justify-between text-xs">
+                    <span class="font-medium text-gray-200">${cat}</span>
+                    <span class="font-bold text-[#ff3b30]">₹ ${amt.toFixed(2)}</span>
+                </div>
+                <div class="w-full bg-[#2c2c2e] h-2 rounded-full overflow-hidden">
+                    <div class="bg-[#ff3b30] h-full" style="width: ${pct}%"></div>
+                </div>
+            `;
+            container.appendChild(row);
+        });
+    }
+
+    // FORM & KEYPAD LOGIC
+    function populateAccountSelectors() {
+        const accs = Object.keys(state.accounts);
+        ['form-account-select', 'form-transfer-from', 'form-transfer-to'].forEach(id => {
+            const select = document.getElementById(id);
+            select.innerHTML = '';
+            accs.forEach(a => {
+                const opt = document.createElement('option');
+                opt.value = a;
+                opt.innerText = a;
+                opt.className = 'bg-[#121214]';
+                select.appendChild(opt);
+            });
+        });
+        if (accs.length >= 2) {
+            document.getElementById('form-transfer-to').selectedIndex = 1;
+        }
+    }
+
+    function openForm(type) {
+        document.getElementById('entry-modal').classList.remove('hidden');
+        setFormType(type || 'Expense');
+        currentForm.amountStr = '0';
+        updateAmountDisplay();
+    }
+
+    function closeForm() {
+        document.getElementById('entry-modal').classList.add('hidden');
+    }
+
+    function setFormType(type) {
+        currentForm.type = type;
+        document.getElementById('form-type-title').innerText = type;
+
+        ['income', 'expense', 'transfer'].forEach(m => {
+            const btn = document.getElementById(`btn-mode-${m}`);
+            btn.classList.remove('bg-[#ff3b30]', 'bg-[#30b0fe]', 'bg-gray-700', 'text-white');
+            btn.classList.add('text-gray-400');
+        });
+
+        const activeBtn = document.getElementById(`btn-mode-${type.toLowerCase()}`);
+        if (type === 'Expense') {
+            activeBtn.classList.add('bg-[#ff3b30]', 'text-white');
+            document.getElementById('form-amount-display').className = 'text-2xl font-bold text-[#ff3b30]';
+        } else if (type === 'Income') {
+            activeBtn.classList.add('bg-[#30b0fe]', 'text-white');
+            document.getElementById('form-amount-display').className = 'text-2xl font-bold text-[#30b0fe]';
+        } else {
+            activeBtn.classList.add('bg-gray-700', 'text-white');
+            document.getElementById('form-amount-display').className = 'text-2xl font-bold text-gray-200';
+        }
+
+        if (type === 'Transfer') {
+            document.getElementById('field-category').classList.add('hidden');
+            document.getElementById('field-account').classList.add('hidden');
+            document.getElementById('field-transfer-accounts').classList.remove('hidden');
+        } else {
+            document.getElementById('field-category').classList.remove('hidden');
+            document.getElementById('field-account').classList.remove('hidden');
+            document.getElementById('field-transfer-accounts').classList.add('hidden');
+            renderSubCategoryPicker();
+        }
+    }
+
+    function renderSubCategoryPicker() {
+        const picker = document.getElementById('sub-category-picker');
+        picker.innerHTML = '';
+        const cats = state.categories[currentForm.type] || {};
+
+        Object.keys(cats).forEach(cat => {
+            cats[cat].forEach(sub => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'p-2 bg-[#1c1c1e] border border-[#2c2c2e] rounded-lg text-left text-gray-300 hover:border-[#ff3b30]';
+                btn.innerHTML = `<div class="font-semibold text-xs text-white">${cat}</div><div class="text-[10px] text-gray-400">${sub}</div>`;
+                btn.onclick = () => selectCategory(cat, sub);
+                picker.appendChild(btn);
+            });
+        });
+    }
+
+    function toggleSubCategoryPicker() {
+        document.getElementById('sub-category-picker').classList.toggle('hidden');
+    }
+
+    function selectCategory(cat, sub) {
+        currentForm.selectedCategory = cat;
+        currentForm.selectedSubCategory = sub;
+        document.getElementById('form-category-selected').innerHTML = `${cat} <span class="text-xs text-gray-400">(${sub})</span>`;
+        document.getElementById('sub-category-picker').classList.add('hidden');
+    }
+
+    function pressKey(key) {
+        let current = currentForm.amountStr;
+
+        if (key === 'backspace') {
+            current = current.slice(0, -1);
+            if (current === '' || current === '-') current = '0';
+        } else if (key === '.') {
+            if (!current.includes('.')) current += '.';
+        } else if (key === '-') {
+            if (current.startsWith('-')) current = current.substring(1);
+            else current = '-' + current;
+        } else {
+            if (current === '0') current = key;
+            else current += key;
+        }
+
+        currentForm.amountStr = current;
+        updateAmountDisplay();
+    }
+
+    function clearAmount() {
+        currentForm.amountStr = '0';
+        updateAmountDisplay();
+    }
+
+    function updateAmountDisplay() {
+        const val = parseFloat(currentForm.amountStr) || 0;
+        document.getElementById('form-amount-display').innerText = val.toFixed(2);
+    }
+
+    function submitForm() {
+        const amount = parseFloat(currentForm.amountStr);
+        if (!amount || amount === 0) {
+            alert('Please enter a valid amount.');
+            return;
+        }
+
+        const type = currentForm.type;
+        const datetimeVal = document.getElementById('form-datetime').value || new Date().toISOString().slice(0,16);
+        const note = document.getElementById('form-note').value;
+
+        if (type === 'Transfer') {
+            const fromAcc = document.getElementById('form-transfer-from').value;
+            const toAcc = document.getElementById('form-transfer-to').value;
+
+            if (fromAcc === toAcc) {
+                alert('From and To accounts must be different.');
+                return;
+            }
+
+            state.accounts[fromAcc] = (state.accounts[fromAcc] || 0) - amount;
+            state.accounts[toAcc] = (state.accounts[toAcc] || 0) + amount;
+
+            state.transactions.unshift({
+                id: Date.now(),
+                type: 'Transfer',
+                amount: amount,
+                from: fromAcc,
+                to: toAcc,
+                note: note,
+                date: datetimeVal
+            });
+        } else {
+            const account = document.getElementById('form-account-select').value;
+            const cat = currentForm.selectedCategory || (type === 'Expense' ? 'Food' : 'Salary');
+            const sub = currentForm.selectedSubCategory || (type === 'Expense' ? 'Groceries' : 'Main Job');
+
+            if (type === 'Expense') {
+                state.accounts[account] = (state.accounts[account] || 0) - amount;
+            } else {
+                state.accounts[account] = (state.accounts[account] || 0) + amount;
+            }
+
+            state.transactions.unshift({
+                id: Date.now(),
+                type: type,
+                amount: amount,
+                account: account,
+                category: cat,
+                subCategory: sub,
+                note: note,
+                date: datetimeVal
+            });
+        }
+
+        saveLocalData();
+        renderAll();
+        closeForm();
+
+        document.getElementById('form-note').value = '';
+        currentForm.selectedCategory = '';
+        currentForm.selectedSubCategory = '';
+        document.getElementById('form-category-selected').innerHTML = 'Select Category <i class="fas fa-chevron-right text-xs ml-1"></i>';
+    }
+
+    function deleteTransactionConfirm(id) {
+        if (confirm('Delete this transaction? (Account balances will not be retroactively altered)')) {
+            state.transactions = state.transactions.filter(t => t.id !== id);
+            saveLocalData();
+            renderAll();
+        }
+    }
+
+    // FAVORITES SYSTEM
+    function saveCurrentAsFavorite() {
+        const type = currentForm.type;
+        const cat = currentForm.selectedCategory || 'General';
+        const sub = currentForm.selectedSubCategory || '';
+        const amt = parseFloat(currentForm.amountStr) || 0;
+
+        const fav = { id: Date.now(), type, category: cat, subCategory: sub, amount: amt };
+        state.favorites.push(fav);
+        saveLocalData();
+        alert('Saved as Favorite template!');
+    }
+
+    function openFavoritesModal() {
+        document.getElementById('favorites-modal').classList.remove('hidden');
+        renderFavoritesList();
+    }
+
+    function closeFavoritesModal() {
+        document.getElementById('favorites-modal').classList.add('hidden');
+    }
+
+    function renderFavoritesList() {
+        const container = document.getElementById('favorites-list');
+        container.innerHTML = '';
+
+        if (!state.favorites || state.favorites.length === 0) {
+            container.innerHTML = `<div class="p-8 text-center text-xs text-gray-500">No favorite templates saved yet. Click the ⭐ icon on the entry screen to add one.</div>`;
+            return;
+        }
+
+        state.favorites.forEach((fav, idx) => {
+            const card = document.createElement('div');
+            card.className = 'bg-[#1c1c1e] p-3 rounded-xl border border-[#2c2c2e] flex justify-between items-center text-xs';
+            card.innerHTML = `
+                <div>
+                    <div class="font-semibold text-gray-200">${fav.type}: ${fav.category} ${fav.subCategory ? `(${fav.subCategory})` : ''}</div>
+                    <div class="text-[10px] text-gray-500">Amount: ₹ ${fav.amount.toFixed(2)}</div>
+                </div>
+                <div class="space-x-2">
+                    <button onclick="applyFavorite(${idx})" class="px-2.5 py-1 bg-[#ff3b30] text-white rounded text-[10px]">Use</button>
+                    <button onclick="deleteFavorite(${idx})" class="px-2 py-1 bg-gray-800 text-gray-400 rounded text-[10px]"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function applyFavorite(idx) {
+        const fav = state.favorites[idx];
+        closeFavoritesModal();
+        openForm(fav.type);
+        currentForm.amountStr = fav.amount.toString();
+        selectCategory(fav.category, fav.subCategory);
+        updateAmountDisplay();
+    }
+
+    function deleteFavorite(idx) {
+        state.favorites.splice(idx, 1);
+        saveLocalData();
+        renderFavoritesList();
+    }
+
+    // CATEGORY MANAGER
+    function openCategoryManager() {
+        document.getElementById('category-manager-modal').classList.remove('hidden');
+        renderCategoryListDisplay();
+    }
+
+    function closeCategoryManager() {
+        document.getElementById('category-manager-modal').classList.add('hidden');
+    }
+
+    function renderCategoryListDisplay() {
+        const container = document.getElementById('category-list-display');
+        container.innerHTML = '';
+
+        ['Expense', 'Income'].forEach(type => {
+            const group = document.createElement('div');
+            group.className = 'bg-[#1c1c1e] p-3 rounded-lg border border-[#2c2c2e] space-y-2 text-xs';
+            let catHTML = `<div class="font-bold text-gray-300 border-b border-[#2c2c2e] pb-1">${type} Categories</div>`;
+
+            const typeCats = state.categories[type] || {};
+            Object.keys(typeCats).forEach(cat => {
+                catHTML += `<div class="pt-1"><span class="font-semibold text-gray-200">${cat}:</span> <span class="text-gray-400">${typeCats[cat].join(', ')}</span></div>`;
+            });
+
+            group.innerHTML = catHTML;
+            container.appendChild(group);
+        });
+    }
+
+    function addCategorySubmit() {
+        const type = document.getElementById('new-cat-type').value;
+        const main = document.getElementById('new-cat-main').value.trim();
+        const sub = document.getElementById('new-cat-sub').value.trim();
+
+        if (!main) return alert('Main category name required.');
+
+        if (!state.categories[type][main]) {
+            state.categories[type][main] = [];
+        }
+
+        if (sub && !state.categories[type][main].includes(sub)) {
+            state.categories[type][main].push(sub);
+        }
+
+        saveLocalData();
+        renderCategoryListDisplay();
+        document.getElementById('new-cat-main').value = '';
+        document.getElementById('new-cat-sub').value = '';
+    }
+
+    // ACCOUNT MANAGER
+    function openAccountManager() {
+        document.getElementById('account-manager-modal').classList.remove('hidden');
+        renderAccountManagerList();
+    }
+
+    function closeAccountManager() {
+        document.getElementById('account-manager-modal').classList.add('hidden');
+    }
+
+    function renderAccountManagerList() {
+        const container = document.getElementById('account-manager-list');
+        container.innerHTML = '';
+
+        Object.keys(state.accounts).forEach(acc => {
+            const row = document.createElement('div');
+            row.className = 'bg-[#1c1c1e] p-3 rounded-lg border border-[#2c2c2e] flex justify-between items-center text-xs';
+            row.innerHTML = `
+                <span class="font-semibold text-gray-200">${acc}</span>
+                <span class="text-[#30b0fe] font-bold">₹ ${state.accounts[acc].toFixed(2)}</span>
+            `;
+            container.appendChild(row);
+        });
+    }
+
+    function addAccountSubmit() {
+        const name = document.getElementById('new-acc-name').value.trim();
+        const bal = parseFloat(document.getElementById('new-acc-balance').value) || 0;
+
+        if (!name) return alert('Account name required.');
+
+        state.accounts[name] = bal;
+        saveLocalData();
+        renderAccountManagerList();
+        renderAccountsView();
+        populateAccountSelectors();
+
+        document.getElementById('new-acc-name').value = '';
+        document.getElementById('new-acc-balance').value = '';
+    }
+
+    // BACKUP & RESTORE (100% OFFLINE)
+    function exportDataJSON() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `finance_backup_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    function importDataJSON(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (imported.accounts && imported.transactions) {
+                    state = imported;
+                    saveLocalData();
+                    renderAll();
+                    alert('Data imported successfully!');
+                } else {
+                    alert('Invalid backup format.');
+                }
+            } catch(err) {
+                alert('Error parsing JSON file.');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function resetDataConfirm() {
+        if (confirm('Are you sure you want to reset all local financial data?')) {
+            localStorage.removeItem('personal_finance_db');
+            state = JSON.parse(JSON.stringify(defaultData));
+            saveLocalData();
+            renderAll();
+            alert('Data reset to default state.');
+        }
+    }
+
+    // COMPLETE OFFLINE + DATA-INTEGRITY PATCH (v2)
+    // All balances are recalculated from opening balances and the transaction ledger.
+    function finiteMoney(value) {
+        const n = Number(value);
+        return Number.isFinite(n) ? Math.round((n + Number.EPSILON) * 100) / 100 : 0;
+    }
+
+    function safeText(value, maxLength = 300) {
+        return String(value == null ? '' : value).replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, maxLength);
+    }
+
+    function escapeHTML(value) {
+        return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    function transactionEffectMap(transactions, accounts) {
+        const effects = {};
+        Object.keys(accounts || {}).forEach(name => effects[name] = 0);
+        (Array.isArray(transactions) ? transactions : []).forEach(t => {
+            if (!t || !Number.isFinite(Number(t.amount)) || Number(t.amount) <= 0) return;
+            const amount = finiteMoney(t.amount);
+            if (t.type === 'Income' && t.account in effects) effects[t.account] += amount;
+            if (t.type === 'Expense' && t.account in effects) effects[t.account] -= amount;
+            if (t.type === 'Transfer') {
+                if (t.from in effects) effects[t.from] -= amount;
+                if (t.to in effects) effects[t.to] += amount;
+            }
+        });
+        return effects;
+    }
+
+    function normalizeFinanceState(raw) {
+        const base = JSON.parse(JSON.stringify(defaultData));
+        const data = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+        const accounts = {};
+        if (data.accounts && typeof data.accounts === 'object' && !Array.isArray(data.accounts)) {
+            Object.entries(data.accounts).forEach(([name, balance]) => {
+                const cleanName = safeText(name, 50);
+                if (cleanName) accounts[cleanName] = finiteMoney(balance);
+            });
+        }
+        if (!Object.keys(accounts).length) Object.assign(accounts, base.accounts);
+
+        const transactions = (Array.isArray(data.transactions) ? data.transactions : []).map((t, i) => {
+            if (!t || typeof t !== 'object') return null;
+            const type = ['Income','Expense','Transfer'].includes(t.type) ? t.type : null;
+            const amount = finiteMoney(t.amount);
+            const date = safeText(t.date, 30);
+            if (!type || amount <= 0 || !date || Number.isNaN(new Date(date).getTime())) return null;
+            const item = { id: t.id == null ? (Date.now() + i) : safeText(t.id, 80), type, amount, note: safeText(t.note, 500), date };
+            if (type === 'Transfer') {
+                item.from = safeText(t.from, 50); item.to = safeText(t.to, 50);
+                if (!item.from || !item.to || item.from === item.to) return null;
+                if (!(item.from in accounts)) accounts[item.from] = 0;
+                if (!(item.to in accounts)) accounts[item.to] = 0;
+            } else {
+                item.account = safeText(t.account, 50);
+                if (!item.account) return null;
+                if (!(item.account in accounts)) accounts[item.account] = 0;
+                item.category = safeText(t.category || 'Other', 60);
+                item.subCategory = safeText(t.subCategory || '', 60);
+            }
+            return item;
+        }).filter(Boolean);
+
+        let openingBalances = {};
+        if (data.openingBalances && typeof data.openingBalances === 'object' && !Array.isArray(data.openingBalances)) {
+            Object.keys(accounts).forEach(name => openingBalances[name] = finiteMoney(data.openingBalances[name]));
+        } else {
+            // One-time migration: infer the opening balance from the old saved balance and ledger.
+            const effects = transactionEffectMap(transactions, accounts);
+            Object.keys(accounts).forEach(name => openingBalances[name] = finiteMoney(accounts[name] - (effects[name] || 0)));
+        }
+        Object.keys(accounts).forEach(name => { if (!(name in openingBalances)) openingBalances[name] = finiteMoney(accounts[name]); });
+
+        const categories = { Expense: {}, Income: {} };
+        ['Expense','Income'].forEach(type => {
+            const input = data.categories && data.categories[type];
+            if (input && typeof input === 'object' && !Array.isArray(input)) {
+                Object.entries(input).forEach(([cat, subs]) => {
+                    const cleanCat = safeText(cat, 60);
+                    if (cleanCat) categories[type][cleanCat] = Array.isArray(subs) ? [...new Set(subs.map(s => safeText(s,60)).filter(Boolean))] : [];
+                });
+            }
+            if (!Object.keys(categories[type]).length) categories[type] = base.categories[type];
+        });
+        const favorites = (Array.isArray(data.favorites) ? data.favorites : []).filter(f => f && ['Income','Expense','Transfer'].includes(f.type)).map((f,i) => ({
+            id: f.id == null ? Date.now()+i : safeText(f.id,80), type:f.type,
+            category:safeText(f.category || 'General',60), subCategory:safeText(f.subCategory || '',60), amount:Math.max(0,finiteMoney(f.amount))
+        }));
+        return {
+            currentYear: Number.isInteger(Number(data.currentYear)) ? Number(data.currentYear) : base.currentYear,
+            currentMonth: Number.isInteger(Number(data.currentMonth)) && Number(data.currentMonth)>=0 && Number(data.currentMonth)<=11 ? Number(data.currentMonth) : base.currentMonth,
+            selectedCalendarDate: /^\d{4}-\d{2}-\d{2}$/.test(data.selectedCalendarDate || '') ? data.selectedCalendarDate : base.selectedCalendarDate,
+            accounts, openingBalances, categories, favorites, transactions
+        };
+    }
+
+    function recalculateBalances() {
+        if (!state.openingBalances) state.openingBalances = {};
+        Object.keys(state.accounts).forEach(name => {
+            if (!(name in state.openingBalances)) state.openingBalances[name] = finiteMoney(state.accounts[name]);
+        });
+        const effects = transactionEffectMap(state.transactions, state.accounts);
+        Object.keys(state.accounts).forEach(name => {
+            state.accounts[name] = finiteMoney(finiteMoney(state.openingBalances[name]) + (effects[name] || 0));
+        });
+    }
+
+    function loadLocalData() {
+        try {
+            const stored = localStorage.getItem('personal_finance_db');
+            const parsed = stored ? JSON.parse(stored) : defaultData;
+            const normalized = normalizeFinanceState(parsed);
+            return normalized;
+        } catch (error) {
+            console.warn('Saved finance data could not be read; starting with defaults.', error);
+            return normalizeFinanceState(defaultData);
+        }
+    }
+
+    function saveLocalData() {
+        recalculateBalances();
+        try {
+            localStorage.setItem('personal_finance_db', JSON.stringify(state));
+            const status = document.getElementById('storage-status');
+            if (status) status.textContent = 'Saved on this device';
+        } catch (error) {
+            alert('Unable to save data. Device storage may be full. Export a backup and free some storage.');
+            console.error(error);
+        }
+    }
+
+    // Rebuild the ledger after every change so delete/edit/restore never leaves stale balances.
+    function submitForm() {
+        const amount = finiteMoney(currentForm.amountStr);
+        if (!Number.isFinite(amount) || amount <= 0) { alert('Please enter an amount greater than zero.'); return; }
+        const type = currentForm.type;
+        const datetimeVal = document.getElementById('form-datetime').value || new Date().toISOString().slice(0,16);
+        const note = safeText(document.getElementById('form-note').value, 500);
+        const id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(36).slice(2,8);
+
+        if (type === 'Transfer') {
+            const fromAcc = document.getElementById('form-transfer-from').value;
+            const toAcc = document.getElementById('form-transfer-to').value;
+            if (!fromAcc || !toAcc || fromAcc === toAcc) { alert('Choose two different accounts for the transfer.'); return; }
+            if (!(fromAcc in state.accounts) || !(toAcc in state.accounts)) { alert('Please select valid accounts.'); return; }
+            state.transactions.unshift({ id, type:'Transfer', amount, from:fromAcc, to:toAcc, note, date:datetimeVal });
+        } else {
+            const account = document.getElementById('form-account-select').value;
+            if (!account || !(account in state.accounts)) { alert('Please select a valid account.'); return; }
+            const cat = safeText(currentForm.selectedCategory || (type === 'Expense' ? 'Food' : 'Salary'),60);
+            const sub = safeText(currentForm.selectedSubCategory || (type === 'Expense' ? 'Groceries' : 'Main Job'),60);
+            state.transactions.unshift({ id, type, amount, account, category:cat, subCategory:sub, note, date:datetimeVal });
+        }
+        saveLocalData(); renderAll(); closeForm();
+        document.getElementById('form-note').value = '';
+        currentForm.amountStr = '0'; currentForm.selectedCategory = ''; currentForm.selectedSubCategory = '';
+        document.getElementById('form-category-selected').innerHTML = 'Select Category <i class="fas fa-chevron-right text-xs ml-1"></i>';
+        updateAmountDisplay();
+    }
+
+    function deleteTransactionConfirm(id) {
+        if (!confirm('Delete this transaction? The account balances will be recalculated automatically.')) return;
+        state.transactions = state.transactions.filter(t => String(t.id) !== String(id));
+        saveLocalData(); renderAll();
+    }
+
+    function addAccountSubmit() {
+        const name = safeText(document.getElementById('new-acc-name').value, 50);
+        const rawBalance = document.getElementById('new-acc-balance').value;
+        const bal = finiteMoney(rawBalance === '' ? 0 : rawBalance);
+        if (!name) { alert('Account name required.'); return; }
+        if (rawBalance !== '' && !Number.isFinite(Number(rawBalance))) { alert('Enter a valid opening balance.'); return; }
+        if (!(name in state.accounts)) state.openingBalances[name] = bal;
+        else state.openingBalances[name] = bal; // This field is the opening balance, not today's calculated balance.
+        state.accounts[name] = bal;
+        saveLocalData(); renderAccountManagerList(); renderAll();
+        document.getElementById('new-acc-name').value = '';
+        document.getElementById('new-acc-balance').value = '';
+    }
+
+    function renderAccountManagerList() {
+        const container = document.getElementById('account-manager-list');
+        container.innerHTML = '';
+        Object.keys(state.accounts).forEach(acc => {
+            const row = document.createElement('div');
+            row.className = 'bg-[#1c1c1e] p-3 rounded-lg border border-[#2c2c2e] flex justify-between items-center text-xs';
+            const name = document.createElement('span'); name.className = 'font-semibold text-gray-200'; name.textContent = acc;
+            const bal = document.createElement('span'); bal.className = 'text-[#30b0fe] font-bold'; bal.textContent = '₹ ' + finiteMoney(state.accounts[acc]).toFixed(2);
+            row.append(name, bal); container.appendChild(row);
+        });
+    }
+
+    function exportDataJSON() {
+        saveLocalData();
+        const backup = { app:'Personal Finance Tracker', version:2, exportedAt:new Date().toISOString(), data:state };
+        const blob = new Blob([JSON.stringify(backup,null,2)], {type:'application/json;charset=utf-8'});
+        const filename = `finance_backup_${new Date().toISOString().slice(0,10)}.json`;
+        try {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = filename; a.style.display='none';
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 30000);
+        } catch (error) {
+            const reader = new FileReader();
+            reader.onload = () => { const w = window.open(); if (w) { w.document.write('<pre></pre>'); w.document.querySelector('pre').textContent = reader.result; } else alert('Backup could not be downloaded. Please allow downloads/pop-ups in the Android WebView.'); };
+            reader.readAsText(blob);
+        }
+    }
+
+    function importDataJSON(event) {
+        const file = event && event.target && event.target.files && event.target.files[0];
+        if (!file) return;
+        if (file.size > 10 * 1024 * 1024) { alert('Backup file is too large (maximum 10 MB).'); event.target.value=''; return; }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const parsed = JSON.parse(e.target.result);
+                const raw = parsed && parsed.data ? parsed.data : parsed;
+                if (!raw || typeof raw !== 'object' || !raw.accounts || !Array.isArray(raw.transactions)) throw new Error('Backup is missing required account or transaction data.');
+                const nextState = normalizeFinanceState(raw);
+                if (!confirm(`Restore backup with ${nextState.transactions.length} transactions and ${Object.keys(nextState.accounts).length} accounts? Current data will be replaced.`)) return;
+                try { localStorage.setItem('personal_finance_db_pre_restore', JSON.stringify(state)); } catch (_) {}
+                state = nextState; recalculateBalances(); saveLocalData(); renderAll();
+                alert('Backup restored successfully. A safety copy of the previous data was saved on this device.');
+            } catch(err) { alert('Could not restore this backup: ' + (err.message || 'Invalid JSON file.')); }
+            finally { event.target.value = ''; }
+        };
+        reader.onerror = () => { alert('Unable to read the selected backup file.'); event.target.value=''; };
+        reader.readAsText(file);
+    }
+
+    function resetDataConfirm() {
+        if (!confirm('Are you sure you want to reset all local financial data? Export a backup first if you may need it later.')) return;
+        localStorage.removeItem('personal_finance_db');
+        state = normalizeFinanceState(defaultData); recalculateBalances(); saveLocalData(); renderAll();
+        alert('Data reset to default state.');
+    }
+
+    // Safer renderers: user-entered account/category names are inserted as text, never HTML.
+    function renderTransactionsView() {
+        const monthTrans = getFilteredMonthTransactions();
+        let inc=0, exp=0;
+        monthTrans.forEach(t => { if(t.type==='Income') inc+=t.amount; if(t.type==='Expense') exp+=t.amount; });
+        document.getElementById('summary-income').innerText=`₹ ${inc.toFixed(2)}`;
+        document.getElementById('summary-expense').innerText=`₹ ${exp.toFixed(2)}`;
+        document.getElementById('summary-total').innerText=`₹ ${(inc-exp).toFixed(2)}`;
+        const host=document.getElementById('daily-transaction-list'); host.innerHTML='';
+        if(!monthTrans.length){host.textContent='No transactions recorded for this month.';host.className='p-8 text-center text-xs text-gray-500';return;}
+        const groups={}; monthTrans.forEach(t=>{const k=t.date.split('T')[0];(groups[k] ||= []).push(t);});
+        Object.keys(groups).sort().reverse().forEach(k=>{
+            const items=groups[k]; let di=0,de=0; items.forEach(t=>{if(t.type==='Income')di+=t.amount;if(t.type==='Expense')de+=t.amount;});
+            const d=new Date(k+'T00:00:00'); const head=document.createElement('div');
+            head.className='px-4 py-2 bg-[#171719] text-xs text-gray-400 flex justify-between items-center border-b border-[#2c2c2e]';
+            head.textContent=`${String(d.getDate()).padStart(2,'0')} ${d.toLocaleString('default',{weekday:'short'})}     +₹ ${di.toFixed(2)}     -₹ ${de.toFixed(2)}`;host.appendChild(head);
+            items.forEach(t=>{
+                const item=document.createElement('div'); item.className='px-4 py-3 flex justify-between items-center bg-[#1c1c1e] hover:bg-[#2c2c2e] transition-colors cursor-pointer';
+                item.onclick=()=>deleteTransactionConfirm(t.id);
+                const left=document.createElement('div'); left.className='min-w-0';
+                const title=document.createElement('div');title.className='text-xs font-semibold text-gray-200';title.textContent=(t.category||t.type)+(t.subCategory?' ('+t.subCategory+')':'');
+                const note=document.createElement('div');note.className='text-[10px] text-gray-500';note.textContent=(t.note?t.note+' • ':'')+(t.type==='Transfer'?t.from+' → '+t.to:t.account);
+                left.append(title,note);const right=document.createElement('div');right.className='text-xs font-bold '+(t.type==='Income'?'text-[#30b0fe]':t.type==='Expense'?'text-[#ff3b30]':'text-gray-300');right.textContent=`₹ ${t.type==='Expense'?'-':''}${t.amount.toFixed(2)}`;item.append(left,right);host.appendChild(item);
+            });
+        });
+    }
+
+    function renderAccountsView() {
+        recalculateBalances(); const total=Object.values(state.accounts).reduce((a,b)=>a+b,0);
+        document.getElementById('acc-summary-assets').innerText=`₹ ${total.toFixed(2)}`;
+        document.getElementById('acc-summary-liabilities').innerText='₹ 0.00';
+        document.getElementById('acc-summary-total').innerText=`₹ ${total.toFixed(2)}`;
+        const host=document.getElementById('accounts-list');host.innerHTML='';
+        Object.keys(state.accounts).forEach(name=>{const row=document.createElement('div');row.className='bg-[#1c1c1e] p-4 rounded-xl flex justify-between items-center border border-[#2c2c2e]';const n=document.createElement('span');n.className='text-sm font-semibold text-gray-200';n.textContent=name;const b=document.createElement('span');b.className='text-xs font-bold text-[#30b0fe]';b.textContent='₹ '+state.accounts[name].toFixed(2);row.append(n,b);host.appendChild(row);});
+    }
+
+    function renderTotalOverview() {
+        recalculateBalances(); const total=Object.values(state.accounts).reduce((a,b)=>a+b,0);
+        document.getElementById('total-net-worth').innerText=`₹ ${total.toFixed(2)}`;
+        let income=0,expense=0;state.transactions.forEach(t=>{if(t.type==='Income')income+=t.amount;if(t.type==='Expense')expense+=t.amount;});
+        document.getElementById('total-all-income').innerText=`₹ ${income.toFixed(2)}`;document.getElementById('total-all-expense').innerText=`₹ ${expense.toFixed(2)}`;
+        const host=document.getElementById('total-account-distribution');host.innerHTML='';Object.keys(state.accounts).forEach(name=>{const row=document.createElement('div');row.className='flex justify-between items-center py-1 border-b border-[#2c2c2e]';const n=document.createElement('span');n.className='text-gray-400';n.textContent=name;const b=document.createElement('span');b.className='font-semibold text-gray-200';b.textContent='₹ '+state.accounts[name].toFixed(2);row.append(n,b);host.appendChild(row);});
+    }
+
+    function renderCategoryListDisplay() {
+        const host=document.getElementById('category-list-display');host.innerHTML='';
+        ['Expense','Income'].forEach(type=>{const group=document.createElement('div');group.className='bg-[#1c1c1e] p-3 rounded-lg border border-[#2c2c2e] space-y-2 text-xs';const title=document.createElement('div');title.className='font-bold text-gray-300 border-b border-[#2c2c2e] pb-1';title.textContent=type+' Categories';group.appendChild(title);Object.entries(state.categories[type]||{}).forEach(([cat,subs])=>{const line=document.createElement('div');line.className='pt-1';line.textContent=cat+': '+subs.join(', ');group.appendChild(line);});host.appendChild(group);});
+    }
+
+    function renderSubCategoryPicker() {
+        const picker=document.getElementById('sub-category-picker');picker.innerHTML='';
+        Object.entries(state.categories[currentForm.type]||{}).forEach(([cat,subs])=>subs.forEach(sub=>{
+            const btn=document.createElement('button');btn.type='button';btn.className='p-2 bg-[#1c1c1e] border border-[#2c2c2e] rounded-lg text-left text-gray-300';
+            const a=document.createElement('div');a.className='font-semibold text-xs text-white';a.textContent=cat;
+            const b=document.createElement('div');b.className='text-[10px] text-gray-400';b.textContent=sub;
+            btn.append(a,b);btn.onclick=()=>selectCategory(cat,sub);picker.appendChild(btn);
+        }));
+    }
+
+    function selectCategory(cat, sub) {
+        currentForm.selectedCategory=safeText(cat,60);currentForm.selectedSubCategory=safeText(sub,60);
+        const host=document.getElementById('form-category-selected');host.textContent=currentForm.selectedCategory+' ('+currentForm.selectedSubCategory+')';
+        document.getElementById('sub-category-picker').classList.add('hidden');
+    }
+
+    function renderFavoritesList() {
+        const host=document.getElementById('favorites-list');host.innerHTML='';
+        if(!state.favorites.length){host.textContent='No favorite templates saved yet. Click the star icon on the entry screen to add one.';return;}
+        state.favorites.forEach((fav,idx)=>{
+            const card=document.createElement('div');card.className='bg-[#1c1c1e] p-3 rounded-xl border border-[#2c2c2e] flex justify-between items-center text-xs';
+            const info=document.createElement('div');const title=document.createElement('div');title.className='font-semibold text-gray-200';title.textContent=`${fav.type}: ${fav.category}${fav.subCategory?' ('+fav.subCategory+')':''}`;
+            const amount=document.createElement('div');amount.className='text-[10px] text-gray-500';amount.textContent='Amount: ₹ '+fav.amount.toFixed(2);info.append(title,amount);
+            const actions=document.createElement('div');actions.className='space-x-2';const use=document.createElement('button');use.className='px-2.5 py-1 bg-[#ff3b30] text-white rounded text-[10px]';use.textContent='Use';use.onclick=()=>applyFavorite(idx);
+            const del=document.createElement('button');del.className='px-2 py-1 bg-gray-800 text-gray-400 rounded text-[10px]';del.textContent='Delete';del.onclick=()=>deleteFavorite(idx);actions.append(use,del);card.append(info,actions);host.appendChild(card);
+        });
+    }
+
+    function renderCalendarDayTransactions() {
+        const host=document.getElementById('calendar-day-transactions');
+        document.getElementById('selected-date-title').innerText=`Transactions on ${state.selectedCalendarDate}`;host.innerHTML='';
+        const records=state.transactions.filter(t=>t.date.startsWith(state.selectedCalendarDate));
+        if(!records.length){host.textContent='No records for this date.';return;}
+        records.forEach(t=>{const row=document.createElement('div');row.className='px-4 py-2.5 flex justify-between items-center hover:bg-[#1c1c1e] text-xs';const left=document.createElement('div');
+            const title=document.createElement('div');title.className='font-medium text-gray-200';title.textContent=t.category||t.type;const sub=document.createElement('div');sub.className='text-[10px] text-gray-500';sub.textContent=t.type==='Transfer'?t.from+' → '+t.to:t.account;left.append(title,sub);
+            const amount=document.createElement('div');amount.className='font-bold '+(t.type==='Income'?'text-[#30b0fe]':t.type==='Expense'?'text-[#ff3b30]':'text-gray-300');amount.textContent='₹ '+t.amount.toFixed(2);row.append(left,amount);host.appendChild(row);});
+    }
+
+    function renderMonthlyView() {
+        const host=document.getElementById('monthly-category-breakdown');host.innerHTML='';const records=getFilteredMonthTransactions().filter(t=>t.type==='Expense');
+        const totals={};records.forEach(t=>{const c=t.category||'Other';totals[c]=(totals[c]||0)+t.amount;});const sum=Object.values(totals).reduce((a,b)=>a+b,0);
+        if(!sum){host.textContent='No expense records this month.';return;}
+        Object.entries(totals).sort((a,b)=>b[1]-a[1]).forEach(([cat,amt])=>{const pct=amt/sum*100;const card=document.createElement('div');card.className='bg-[#1c1c1e] p-3 rounded-lg border border-[#2c2c2e] space-y-1.5';const line=document.createElement('div');line.className='flex justify-between text-xs font-medium';const name=document.createElement('span');name.className='text-gray-200';name.textContent=cat;const val=document.createElement('span');val.className='text-[#ff3b30]';val.textContent=`₹ ${amt.toFixed(2)} (${pct.toFixed(1)}%)`;line.append(name,val);const track=document.createElement('div');track.className='w-full bg-[#2c2c2e] h-2 rounded-full overflow-hidden';const bar=document.createElement('div');bar.className='bg-[#ff3b30] h-full rounded-full';bar.style.width=pct+'%';track.appendChild(bar);card.append(line,track);host.appendChild(card);});
+    }
+
+    function renderStatsView() {
+        const host=document.getElementById('stats-chart-container');host.innerHTML='';const totals={};getFilteredMonthTransactions().filter(t=>t.type==='Expense').forEach(t=>{const c=t.category||'Other';totals[c]=(totals[c]||0)+t.amount;});const sum=Object.values(totals).reduce((a,b)=>a+b,0);
+        if(!sum){host.textContent='No expense stats available.';return;}
+        Object.entries(totals).forEach(([cat,amt])=>{const pct=amt/sum*100;const row=document.createElement('div');row.className='bg-[#1c1c1e] p-3 rounded-xl border border-[#2c2c2e] space-y-1';const line=document.createElement('div');line.className='flex justify-between text-xs';const name=document.createElement('span');name.className='font-medium text-gray-200';name.textContent=cat;const val=document.createElement('span');val.className='font-bold text-[#ff3b30]';val.textContent='₹ '+amt.toFixed(2);line.append(name,val);const track=document.createElement('div');track.className='w-full bg-[#2c2c2e] h-2 rounded-full overflow-hidden';const bar=document.createElement('div');bar.className='bg-[#ff3b30] h-full';bar.style.width=pct+'%';track.appendChild(bar);row.append(line,track);host.appendChild(row);});
+    }
+
+    // Avoid a negative-sign keypad path; amounts are always positive ledger entries.
+    function pressKey(key) {
+        let value=currentForm.amountStr||'0';
+        if(key==='backspace') value=value.slice(0,-1)||'0';
+        else if(key==='.') {if(!value.includes('.')) value+='.';}
+        else if(/^\d$/.test(String(key))) value=value==='0'?String(key):value+String(key);
+        currentForm.amountStr=value;updateAmountDisplay();
+    }
+
+    // Update labels and selectors after migration; localStorage is the offline data store.
+    document.addEventListener('DOMContentLoaded', () => {
+        const accountLabel=document.querySelector('#account-manager-modal .text-xs.font-semibold.text-gray-300');
+        if(accountLabel) accountLabel.textContent='Add / Edit Account (opening balance)';
+        const note=document.createElement('div');note.id='storage-status';note.className='text-center text-[10px] text-gray-500 py-1';note.textContent='Saved on this device';
+        const app=document.querySelector('.app-container');if(app)app.appendChild(note);
+    });
+
+</script>
+
+</body>
+</html>

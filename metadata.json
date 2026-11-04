@@ -1,0 +1,6 @@
+{
+  "name": "FinanceTrack Compose - Native Android",
+  "description": "Native Android Personal Finance Tracker built with Kotlin, Jetpack Compose, Material 3, and Room SQLite with live interactive simulator and project source code exporter.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,11 @@
+<resources>
+    <color name="bg_main">#121214</color>
+    <color name="bg_card">#1C1C1E</color>
+    <color name="bg_card_hover">#2C2C2E</color>
+    <color name="border_color">#2C2C2E</color>
+    <color name="accent_red">#FF3B30</color>
+    <color name="accent_blue">#30B0FE</color>
+    <color name="accent_green">#34C759</color>
+    <color name="text_main">#E5E5EA</color>
+    <color name="text_muted">#8E8E93</color>
+</resources>
